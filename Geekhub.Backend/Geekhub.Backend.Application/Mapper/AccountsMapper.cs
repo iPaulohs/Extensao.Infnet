@@ -9,11 +9,11 @@ public class AccountsMapper : IRegister
 {
     public void Register(TypeAdapterConfig config)
     {
-        config.NewConfig<CreateAccountCommand, Account>()
+        config.NewConfig<CreateAccountCommand, User>()
             .Map(dest => dest.Email, src => new Email(src.Email))
-            .Map(dest => dest.Password, src => new Password(src.Password));
+            .Map(dest => dest.Password, src => new Password(Password.HashPassword(src.Password)));
 
-        config.NewConfig<Account, CreateAccountResult>()
+        config.NewConfig<User, AccountDataResult>()
             .Map(dest => dest.Email, src => src.Email.Value);
     }
 }

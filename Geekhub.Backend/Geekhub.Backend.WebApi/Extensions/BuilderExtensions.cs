@@ -11,6 +11,8 @@ namespace Geekhub.Backend.WebApi.Extensions
             app.MapScalarApiReference();
             app.MapAccountsController();
             app.MapMediaController();
+            app.UseAuthentication();
+            app.UseAuthorization();
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace Geekhub.Backend.Domain.Results;
 
-public record CreateAccountResult(
+public record AccountDataResult(
     Guid Id,
     string Name,
     string? Surname,
@@ -8,5 +8,6 @@ public record CreateAccountResult(
     string DisplayName,
     string? Bio,
     string Email,
-    DateTime BirthDate
+    DateTime BirthDate,
+    string Token
     );

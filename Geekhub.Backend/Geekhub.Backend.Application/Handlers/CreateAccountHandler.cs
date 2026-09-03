@@ -3,6 +3,7 @@ using Geekhub.Backend.Domain.Errors;
 using Geekhub.Backend.Domain.Events;
 using Geekhub.Backend.Domain.Models;
 using Geekhub.Backend.Domain.Results;
+using Geekhub.Backend.Domain.Services;
 using Geekhub.Backend.Infrastructure.DatabaseAdapter;
 using Geekhub.Backend.WebApi.Dto.Request.Commands;
 using MapsterMapper;
@@ -13,11 +14,12 @@ namespace Geekhub.Backend.Application.Handlers;
 
 public static class CreateAccountHandler
 {
-    public static async Task<ErrorOr<CreateAccountResult>> Handle(
-        CreateAccountCommand request,
+    public static async Task<ErrorOr<AccountDataResult>> Handle(
+        CreateAccountCommand command,
         IMapper mapper,
         AppDbContext dbContext,
         IMessageBus messageBus,
+        IJwtHandlerService jwtHandlerService,
         CancellationToken cancellationToken)
     {
         try
@@ -26,13 +28,13 @@ public static class CreateAccountHandler
             .SqlQuery<int>($@"
                 SELECT 
                     CASE 
-                        WHEN ""Email"" = {request.Email} THEN 1
-                        WHEN ""Username"" = {request.Username} THEN 3
-                        WHEN ""Email"" = {request.Email} AND ""Username"" = {request.Username} THEN 5
+                        WHEN ""Email"" = {command.Email} THEN 1
+                        WHEN ""Username"" = {command.Username} THEN 3
+                        WHEN ""Email"" = {command.Email} AND ""Username"" = {command.Username} THEN 5
                         ELSE 0
                     END AS ""Value""
                 FROM ""Users""
-                WHERE ""Email"" = {request.Email} OR ""Username"" = {request.Username}
+                WHERE ""Email"" = {command.Email} OR ""Username"" = {command.Username}
                 LIMIT 1")
             .FirstOrDefaultAsync(cancellationToken);
 
@@ -46,7 +48,7 @@ public static class CreateAccountHandler
                     return CreateAccountErrors.EmailAndUsernameAlreadyExists;
             }
 
-            var user = mapper.Map<Account>(request);
+            var user = mapper.Map<User>(command);
 
             dbContext.Users.Add(user);
 
@@ -58,11 +60,14 @@ public static class CreateAccountHandler
                 Email = user.Email.ToString()
             });
 
-            return mapper.Map<CreateAccountResult>(user);
+            return mapper.Map<AccountDataResult>(user) with
+            {
+                Token = jwtHandlerService.GenerateToken(user)
+            };
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return Error.Failure(ex.Message);
+            return Error.Failure();
         }
     }
 }

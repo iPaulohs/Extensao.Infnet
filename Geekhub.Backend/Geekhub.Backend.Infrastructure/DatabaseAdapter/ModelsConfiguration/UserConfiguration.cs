@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Geekhub.Backend.Infrastructure.DatabaseAdapter.ModelsConfiguration;
 
-public class UserConfiguration : IEntityTypeConfiguration<Account>
+public class UserConfiguration : IEntityTypeConfiguration<User>
 {
-    public void Configure(EntityTypeBuilder<Account> builder)
+    public void Configure(EntityTypeBuilder<User> builder)
     {
         builder.HasKey(x => x.Id);
 

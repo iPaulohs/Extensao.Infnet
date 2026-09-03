@@ -1,6 +1,6 @@
 ﻿namespace Geekhub.Backend.Domain.Models
 {
-    public class Account
+    public class User
     {
         /// <summary>
         /// Id do usuário

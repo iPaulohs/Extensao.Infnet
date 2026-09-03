@@ -1,5 +1,6 @@
 ﻿using ErrorOr;
 using Geekhub.Backend.Domain.Adapters;
+using Geekhub.Backend.Domain.Commands;
 using Geekhub.Backend.Domain.Results;
 using Geekhub.Backend.WebApi.Dto.Request.Commands;
 using Geekhub.Backend.WebApi.Filters;
@@ -31,25 +32,41 @@ public static class AccountsController
         {
             var result = await Services
                 .MessageBus
-                .InvokeAsync<ErrorOr<CreateAccountResult>>(request);
+                .InvokeAsync<ErrorOr<AccountDataResult>>(request);
 
-            return Results.Ok(result);
+            if (result.IsError)
+            {
+                return Results.BadRequest(result.Errors);
+            }
+
+            return Results.Ok(result.Value);
         })
             .WithName("CreateAccount")
             .WithSummary("Cria uma nova conta")
             .WithDescription("Realiza a criação de uma nova conta de usuário no sistema.")
             .AddEndpointFilter<ValidationFilter<CreateAccountCommand>>()
-            .Produces<ErrorOr<CreateAccountResult>>();
+            .Produces<ErrorOr<AccountDataResult>>();
 
 
-        group.MapPost("/login", async Task<IResult> ([AsParameters] AccountsControllerServices Services) =>
+        group.MapPost("/login", async Task<IResult> (LoginCommand command, [AsParameters] AccountsControllerServices Services) =>
         {
-            throw new NotImplementedException();
+            var result = await Services
+                .MessageBus
+                .InvokeAsync<ErrorOr<AccountDataResult>>(command);
+
+            if (result.IsError)
+            {
+                return Results.BadRequest(result.Errors);
+            }
+
+            return Results.Ok(result.Value);
         })
             .WithName("Login")
             .WithSummary("Realiza o login")
             .WithDescription("Autentica um usuário utilizando suas credenciais e inicia uma sessão autenticada.")
-            .RequireAuthorization();
+            .AddEndpointFilter<ValidationFilter<LoginCommand>>()
+            .Produces<ErrorOr<AccountDataResult>>()
+            .AllowAnonymous();
 
         group.MapGet("/id", async Task<IResult> ([AsParameters] AccountsControllerServices Services) =>
         {

@@ -23,6 +23,9 @@ dotnet user-secrets set "MinIoAdapterOptions:Endpoint" "localhost:9000" --projec
 dotnet user-secrets set "TmdbAdapterOptions:ApiKey" "SUA_KEY_TMDB" --project Geekhub.Backend.WebApi/Geekhub.Backend.WebApi.csproj
 dotnet user-secrets set "RabbitMQAdapterOptions:BootstrapServers" "amqp://admin:UWJhrL3d1MTgAMSq0zQfF7@localhost:5672" --project Geekhub.Backend.WebApi/Geekhub.Backend.WebApi.csproj
 dotnet user-secrets set "RedisAdapterOptions:Configuration" "localhost:6379,password=nw5DUE14cKgPldcpdqJ5c9" --project Geekhub.Backend.WebApi/Geekhub.Backend.WebApi.csproj
+dotnet user-secrets set "Jwt:Issuer" "https://localhost:7284" --project Geekhub.Backend.WebApi/Geekhub.Backend.WebApi.csproj
+dotnet user-secrets set "Jwt:Audience" "https://localhost:7284" --project Geekhub.Backend.WebApi/Geekhub.Backend.WebApi.csproj
+dotnet user-secrets set "Jwt:Key" "SUA_CHAVE_JWT" --project Geekhub.Backend.WebApi/Geekhub.Backend.WebApi.csproj
 ```
 
 Para visualizar as configurações cadastradas:
@@ -63,7 +66,12 @@ As configurações acima são equivalentes a:
   },
   "RedisAdapterOptions": {
     "Configuration": "localhost:6379,password=nw5DUE14cKgPldcpdqJ5c9"
-  }
+  },
+  "Jwt": {
+    "Issuer": "https://localhost:7284",
+    "Audience": "https://localhost:7284",
+    "Key": "SUA_CHAVE_JWT"
+  } 
 }
 ```
 
