@@ -1,0 +1,72 @@
+# ==========================================
+# .NET / C# / Visual Studio / Rider
+# ==========================================
+# Pastas de build e compilação
+**/[Bb]in/
+**/[Oo]bj/
+**/[Ll]og/
+**/[Ll]ogs/
+**/TestResults/
+
+# Arquivos e diretórios de IDE (Visual Studio / VS Code / Rider)
+.vs/
+.idea/
+*.user
+*.userosscache
+*.sln.docstates
+*.suo
+*.userprefs
+*.DotSettings.user
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# Publicações e pacotes locais
+**/publish/
+*.nupkg
+*.snupkg
+
+# Configurações com segredos locais
+**/appsettings*.local.json
+**/secrets.json
+
+# ==========================================
+# Node.js / Angular / Frontend
+# ==========================================
+# Dependências
+node_modules/
+.pnp
+.pnp.js
+
+# Cache e builds
+dist/
+build/
+out/
+.angular/
+.cache/
+.npm/
+.eslintcache
+
+# Logs de gerenciadores de pacotes
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Variáveis de ambiente
+.env
+.env.local
+.env.*.local
+
+# ==========================================
+# Sistema Operacional / Arquivos Temporários
+# ==========================================
+.DS_Store
+Thumbs.db
+ehthumbs.db
+desktop.ini
+*.tmp
+*.temp

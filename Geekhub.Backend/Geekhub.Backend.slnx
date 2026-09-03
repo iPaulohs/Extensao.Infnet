@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="Geekhub.Backend.Application/Geekhub.Backend.Application.csproj" />
+  <Project Path="Geekhub.Backend.Domain/Geekhub.Backend.Domain.csproj" />
+  <Project Path="Geekhub.Backend.Infrastructure/Geekhub.Backend.Infrastructure.csproj" />
+  <Project Path="Geekhub.Backend.WebApi/Geekhub.Backend.WebApi.csproj" />
+</Solution>
