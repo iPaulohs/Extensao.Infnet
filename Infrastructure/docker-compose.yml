@@ -5,25 +5,49 @@ networks:
     driver: bridge
 
 volumes:
-  rabbitmq_data:
+  kafka_data:
   postgres_data:
   neo4j_data:
   minio_data:
   redis_data:
 
 services:
-  rabbitmq:
-    image: rabbitmq:3.13.7-management-alpine
-    container_name: rabbitmq
+  kafka:
+    image: apache/kafka:latest
+    container_name: kafka
     restart: unless-stopped
     ports:
-      - "5672:5672"    # Porta AMQP
-      - "15672:15672"  # Management UI
+      - "9092:9092" 
     environment:
-      RABBITMQ_DEFAULT_USER: admin
-      RABBITMQ_DEFAULT_PASS: UWJhrL3d1MTgAMSq0zQfF7
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:29092,CONTROLLER://0.0.0.0:9093,PLAINTEXT_HOST://0.0.0.0:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://127.0.0.1:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_NUM_PARTITIONS: 3
     volumes:
-      - rabbitmq_data:/var/lib/rabbitmq
+      - kafka_data:/var/lib/kafka/data
+    networks:
+      - platform-net
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: kafka-ui
+    restart: unless-stopped
+    ports:
+      - "8080:8080"   
+    environment:
+      DYNAMIC_CONFIG_ENABLED: "true"
+      KAFKA_CLUSTERS_0_NAME: local-cluster
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:29092
+    depends_on:
+      - kafka
     networks:
       - platform-net
 
@@ -47,8 +71,8 @@ services:
     container_name: neo4j
     restart: unless-stopped
     ports:
-      - "7474:7474"  # Neo4j Browser (HTTP)
-      - "7687:7687"  # Protocolo Bolt
+      - "7474:7474"    # Neo4j Browser (HTTP)
+      - "7687:7687"    # Protocolo Bolt
     environment:
       NEO4J_AUTH: neo4j/mV7T3Qta7SiYcqARStZpnu
     volumes:
@@ -62,8 +86,8 @@ services:
     restart: unless-stopped
     command: server /data --console-address ":9001"
     ports:
-      - "9000:9000"  # S3 API
-      - "9001:9001"  # Console Web
+      - "9000:9000"    # S3 API
+      - "9001:9001"    # Console Web
     environment:
       MINIO_ROOT_USER: admin
       MINIO_ROOT_PASSWORD: Ft8SV44uQN9dvL7I5nN7Ln
@@ -90,5 +114,15 @@ services:
     restart: unless-stopped
     ports:
       - "5540:5540"
+    networks:
+      - platform-net
+
+  mailpit:
+    image: axllent/mailpit:latest
+    container_name: mailpit
+    restart: unless-stopped
+    ports:
+      - "1025:1025"    # Servidor SMTP
+      - "8025:8025"    # Interface Web
     networks:
       - platform-net

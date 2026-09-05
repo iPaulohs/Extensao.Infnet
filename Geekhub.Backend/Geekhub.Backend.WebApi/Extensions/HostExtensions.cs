@@ -1,8 +1,11 @@
 ﻿using Geekhub.Backend.Application;
+using Geekhub.Backend.Domain;
+using Geekhub.Backend.Domain.Events;
+using System.Text.RegularExpressions;
 using Wolverine;
 using Wolverine.EntityFrameworkCore;
+using Wolverine.Kafka;
 using Wolverine.Postgresql;
-using Wolverine.RabbitMQ;
 
 namespace Geekhub.Backend.WebApi.Extensions
 {
@@ -22,12 +25,35 @@ namespace Geekhub.Backend.WebApi.Extensions
                     connectionString,
                     schemaName: "outbox");
 
-                opts.UseRabbitMq(new Uri(builder.Configuration["RabbitMQAdapterOptions:BootstrapServers"]!))
-                .UseConventionalRouting(x =>
+                opts.UseKafka(builder.Configuration["KafkaAdapterOptions:BootstrapServers"]!)
+                    .AutoProvision();
+
+                var eventTypes = typeof(DomainAssemblyReference).Assembly
+                    .GetTypes()
+                    .Where(t => typeof(IEvent).IsAssignableFrom(t)
+                     && !t.IsInterface
+                     && !t.IsAbstract
+                     && !t.IsGenericType);
+
+                foreach (var eventType in eventTypes)
                 {
-                    x.QueueNameForListener(type => $"{type.Name}Queue");
-                })
-                .AutoProvision();
+                    var topicName = ToKafkaTopicName(eventType.Name);
+
+                    opts.PublishMessage(eventType)
+                        .ToKafkaTopic(topicName);
+                }
+
+                static string ToKafkaTopicName(string typeName)
+                {
+                    if (typeName.EndsWith("Event", StringComparison.OrdinalIgnoreCase))
+                    {
+                        typeName = typeName[..^5];
+                    }
+
+                    return Regex
+                        .Replace(typeName, @"([a-z0-9])([A-Z])", "$1-$2")
+                        .ToLowerInvariant();
+                }
 
                 opts.UseEntityFrameworkCoreTransactions();
 

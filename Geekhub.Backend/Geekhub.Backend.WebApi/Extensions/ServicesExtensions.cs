@@ -39,11 +39,6 @@ public static class ServicesExtensions
                 config.ApiKey = configuration
                     .GetSection("TmdbAdapterOptions:ApiKey").Value!;
             })
-            .AddRabbitMQAdapter(config =>
-            {
-                config.BootstrapServers = configuration
-                    .GetSection("RabbitMQAdapterOptions:BootstrapServers").Value!;
-            })
             .AddRedisAdapter(config =>
             {
                 config.Configuration = configuration

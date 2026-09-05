@@ -21,7 +21,7 @@ dotnet user-secrets init --project Geekhub.Backend.WebApi/Geekhub.Backend.WebApi
 dotnet user-secrets set "DatabaseAdapterOptions:ConnectionString" "Host=localhost;Port=5432;Database=geekhub_db;Username=admin;Password=m7Tu2lwq4a7asdht93ARpa" --project Geekhub.Backend.WebApi/Geekhub.Backend.WebApi.csproj
 dotnet user-secrets set "MinIoAdapterOptions:Endpoint" "localhost:9000" --project Geekhub.Backend.WebApi/Geekhub.Backend.WebApi.csproj
 dotnet user-secrets set "TmdbAdapterOptions:ApiKey" "SUA_KEY_TMDB" --project Geekhub.Backend.WebApi/Geekhub.Backend.WebApi.csproj
-dotnet user-secrets set "RabbitMQAdapterOptions:BootstrapServers" "amqp://admin:UWJhrL3d1MTgAMSq0zQfF7@localhost:5672" --project Geekhub.Backend.WebApi/Geekhub.Backend.WebApi.csproj
+dotnet user-secrets set "KafkaAdapterOptions:BootstrapServers" "127.0.0.1:9092" --project Geekhub.Backend.WebApi/Geekhub.Backend.WebApi.csproj
 dotnet user-secrets set "RedisAdapterOptions:Configuration" "localhost:6379,password=nw5DUE14cKgPldcpdqJ5c9" --project Geekhub.Backend.WebApi/Geekhub.Backend.WebApi.csproj
 dotnet user-secrets set "Jwt:Issuer" "https://localhost:7284" --project Geekhub.Backend.WebApi/Geekhub.Backend.WebApi.csproj
 dotnet user-secrets set "Jwt:Audience" "https://localhost:7284" --project Geekhub.Backend.WebApi/Geekhub.Backend.WebApi.csproj
@@ -31,7 +31,7 @@ dotnet user-secrets set "Jwt:Key" "SUA_CHAVE_JWT" --project Geekhub.Backend.WebA
 Para visualizar as configurações cadastradas:
 
 ```powershell
-dotnet user-secrets list
+dotnet user-secrets list --project Geekhub.Backend.WebApi/Geekhub.Backend.WebApi.csproj
 ```
 
 Para remover uma configuração específica:

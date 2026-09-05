@@ -13,10 +13,10 @@
 		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.3" />
 		<PackageReference Include="StackExchange.Redis" Version="3.1.31" />
 		<PackageReference Include="TMDbLib" Version="3.0.0" />
-		<PackageReference Include="WolverineFx" Version="6.29.2" />
-		<PackageReference Include="WolverineFx.Postgresql" Version="6.29.2" />
-		<PackageReference Include="WolverineFx.RabbitMQ" Version="6.29.2" />
-		<PackageReference Include="WolverineFx.EntityFrameworkCore" Version="6.29.2" />
+		<PackageReference Include="WolverineFx" Version="6.33.0" />
+		<PackageReference Include="WolverineFx.Kafka" Version="6.33.0" />
+		<PackageReference Include="WolverineFx.Postgresql" Version="6.33.0" />
+		<PackageReference Include="WolverineFx.EntityFrameworkCore" Version="6.33.0" />
 	</ItemGroup>
 
 	<ItemGroup>

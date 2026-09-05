@@ -54,11 +54,12 @@ public static class CreateAccountHandler
 
             await dbContext.SaveChangesAsync(cancellationToken);
 
-            await messageBus.PublishAsync(new AccountCreatedEvent
-            {
-                Id = user.Id,
-                Email = user.Email.ToString()
-            });
+            await messageBus.PublishAsync(new AccountCreatedEvent(
+                user.Id,
+                user.Email.ToString(),
+                user.Name,
+                user.Surname
+            ));
 
             return mapper.Map<AccountDataResult>(user) with
             {
