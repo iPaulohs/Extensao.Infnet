@@ -9,7 +9,7 @@ using Wolverine.Postgresql;
 
 namespace Geekhub.Backend.WebApi.Extensions
 {
-    public static class HostExtensions
+    public static partial class HostExtensions
     {
         public static WebApplicationBuilder AddHostExtensions(this WebApplicationBuilder builder)
         {
@@ -50,9 +50,9 @@ namespace Geekhub.Backend.WebApi.Extensions
                         typeName = typeName[..^5];
                     }
 
-                    return Regex
-                        .Replace(typeName, @"([a-z0-9])([A-Z])", "$1-$2")
-                        .ToLowerInvariant();
+                    return EventNameRegex()
+                    .Replace(typeName, "$1-$2")
+                    .ToLowerInvariant();
                 }
 
                 opts.UseEntityFrameworkCoreTransactions();
@@ -62,6 +62,9 @@ namespace Geekhub.Backend.WebApi.Extensions
 
             return builder;
         }
+
+        [GeneratedRegex(@"([a-z0-9])([A-Z])")]
+        private static partial Regex EventNameRegex();
     }
 }
 

@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="Geekhub.EventHandler.Infrastructure/Geekhub.EventHandler.Infrastructure.csproj" />
+  <Project Path="Geekhub.EventHandler.Domain/Geekhub.EventHandler.Domain.csproj" />
+  <Project Path="Geekhub.EventHandler/Geekhub.EventHandler.csproj" />
+</Solution>

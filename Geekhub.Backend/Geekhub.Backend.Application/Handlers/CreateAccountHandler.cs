@@ -56,7 +56,7 @@ public static class CreateAccountHandler
 
             await messageBus.PublishAsync(new AccountCreatedEvent(
                 user.Id,
-                user.Email.ToString(),
+                user.Email.Value,
                 user.Name,
                 user.Surname
             ));
